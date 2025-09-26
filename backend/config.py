@@ -15,7 +15,7 @@ class Config:
     # Google AI API Key
     API_KEY = os.environ.get("API_KEY", "")
 
-    # Veritabanı (örnek SQLite, değiştirebilirsin)
+    # Veritabanı
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DATABASE_URI", "sqlite:///smart_grocery.db"
     )
