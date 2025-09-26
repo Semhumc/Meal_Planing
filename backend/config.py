@@ -1,4 +1,8 @@
 import os
+from dotenv import load_dotenv
+
+# .env dosyasını yükle
+load_dotenv()
 
 class Config:
     """
@@ -8,8 +12,8 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "super-secret-key")
     DEBUG = os.environ.get("DEBUG", True)
 
-    # AI / OpenAI API Key (varsa)
-    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
+    # Google AI API Key
+    API_KEY = os.environ.get("API_KEY", "")
 
     # Veritabanı (örnek SQLite, değiştirebilirsin)
     SQLALCHEMY_DATABASE_URI = os.environ.get(
