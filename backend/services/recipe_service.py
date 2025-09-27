@@ -35,7 +35,7 @@ Kullanıcı tercihleri:
 - Canının çektiği: {preferences.get('cravings', 'Belirtilmedi')}
 - Ek notlar: {preferences.get('notes', 'Yok')}
 
-Bu tercihlere göre {cuisine_name} yemekleri öner. SADECE JSON formatında cevap ver.
+Bu tercihlere göre {cuisine_name} yemekleri minumum 2 tane öner. SADECE JSON formatında cevap ver.
 """
 
     try:
@@ -88,12 +88,27 @@ Bu tercihlere göre {cuisine_name} yemekleri öner. SADECE JSON formatında ceva
 
 
 
-def generate_shopping_list(selected_meals):
-    ingredients_set = set()
-    for meal in selected_meals:
-        for ing in meal.get("ingredients", []):
-            ingredients_set.add(ing)
-    return list(ingredients_set)
+def generate_shopping_list(ai_response, pantry):
+    shopping_list = set()
+
+    # Eğer dict geldiyse ({"starter": [...], "main": [...]})
+    if isinstance(ai_response, dict):
+        for meal_type, meals in ai_response.items():
+            for meal in meals:
+                for ingredient in meal.get("ingredients", []):
+                    if ingredient.lower() not in [item.lower() for item in pantry]:
+                        shopping_list.add(ingredient)
+
+    # Eğer list geldiyse ([{...}, {...}])
+    elif isinstance(ai_response, list):
+        for meal in ai_response:
+            for ingredient in meal.get("ingredients", []):
+                if ingredient.lower() not in [item.lower() for item in pantry]:
+                    shopping_list.add(ingredient)
+
+    return list(shopping_list)
+
+
 
 def get_fallback_data():
     """Hata durumunda kullanılacak varsayılan data"""
